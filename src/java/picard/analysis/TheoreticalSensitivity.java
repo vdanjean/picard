@@ -40,27 +40,19 @@ public class TheoreticalSensitivity {
     }
 
     //given L lists of lists and N thresholds, count the proportion of each list above each threshold
-    public static List<ArrayList<Double>> proportionsAboveThresholds(final List<ArrayList<Integer>> sums, List<Double> thresholds) {
-        int N = thresholds.size();
-        int L = sums.size();
-        ArrayList<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>(L);
+    public static List<ArrayList<Double>> proportionsAboveThresholds(final List<ArrayList<Integer>> lists, List<Double> thresholds) {
+        ArrayList<ArrayList<Double>> result = new ArrayList<ArrayList<Double>>();
 
-        for (int m = 0; m < L; m++) {
-            ArrayList<Double> mthRow = new ArrayList<Double>(Collections.nCopies(N,0.0));
-            Collections.sort(sums.get(m));
-            int sampleSize = sums.get(m).size();
+        for (ArrayList<Integer> list : lists) {
+            ArrayList<Double> newRow = new ArrayList<Double>(Collections.nCopies(thresholds.size(),0.0));
+            Collections.sort(list);
             int n = 0;
-            int j = 0;  //index within the ordered set of qualitySum samples
-            while (n < N && j < sampleSize) {
-                if (thresholds.get(n) > sums.get(m).get(j)) {
-                    j++;
-                }
-                else {
-                    n++;
-                    result.get(m).set(n, (double) (sampleSize - j)/sampleSize);
-                }
+            int j = 0;  //index within the ordered sample
+            while (n < thresholds.size() && j < list.size()) {
+                if (thresholds.get(n) > list.get(j)) j++;
+                else newRow.set(n++, (double) (list.size() - j)/list.size());
             }
-            result.add(mthRow);
+            result.add(newRow);
         }
         return result;
 

@@ -29,14 +29,13 @@ public class TheoreticalSensitivityTest {
 
         //test that an unfair coin w/ probability 1/4 of heads gives roughly 1/4 heads
         double p = 0.25;
-        double sum = 0.0;
+        int total_heads = 0;
         int N = 10000;
-        double stdDev = Math.sqrt(p*(1-p)/N);
+        double stdDev = Math.sqrt(N*p*(1-p));   //the stddev of the sample total heads
         List<Double> unfairCoinWeights = Arrays.asList(1-p, p);
         final TheoreticalSensitivity.RouletteWheel coinFlipWheel = new TheoreticalSensitivity.RouletteWheel(unfairCoinWeights);
-        for (int n = 0; n < N; n++) sum += coinFlipWheel.draw();
-        double average = sum / N;
-        Assert.assertEquals(average, p, 10*stdDev);
+        for (int n = 0; n < N; n++) total_heads += coinFlipWheel.draw();
+        Assert.assertEquals(total_heads, N*p, 10*stdDev);
     }
 
     @Test
@@ -46,8 +45,12 @@ public class TheoreticalSensitivityTest {
         sums.add(new ArrayList<Integer>(Arrays.asList(10, 10)));
         sums.add(new ArrayList<Integer>(Arrays.asList(5, 11, -2, 4)));
         List<Double> thresholds = Arrays.asList(-1.0, 1.0, 6.0);
+        Assert.assertEquals(sums.size(), 3);
+        Assert.assertEquals(thresholds.size(), 3);
 
         List<ArrayList<Double>> proportions = TheoreticalSensitivity.proportionsAboveThresholds(sums, thresholds);
+        Assert.assertEquals(proportions.size(), 3);
+
         Assert.assertEquals(proportions.get(0).get(0), (double) 3/3);
         Assert.assertEquals(proportions.get(0).get(1), (double) 0/3);
         Assert.assertEquals(proportions.get(0).get(2), (double) 0/3);
@@ -57,6 +60,7 @@ public class TheoreticalSensitivityTest {
         Assert.assertEquals(proportions.get(2).get(0), (double) 3/4);
         Assert.assertEquals(proportions.get(2).get(1), (double) 3/4);
         Assert.assertEquals(proportions.get(2).get(2), (double) 1/4);
+
 
 
     }
