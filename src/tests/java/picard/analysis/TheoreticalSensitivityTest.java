@@ -103,12 +103,14 @@ public class TheoreticalSensitivityTest {
         //we only want the last set of sums, those with numSummands summands
         sums.subList(0, sums.size() - 1).clear();
 
+        Assert.assertEquals(sums.size(), 1);
+
         //test whether the number of elements within one standard deviation agrees with the normal distribution
         List<Double> thresholds = Arrays.asList(mu - sigma, mu + sigma);
 
         //sums is 1 x sampleSize, thresholds is a 2-vector, so proportions is 1 x 2
         List<ArrayList<Double>> proportions = TheoreticalSensitivity.proportionsAboveThresholds(sums, thresholds);
-        double empiricalProportionWithinOneSigma = proportions.get(0).get(1) - proportions.get(0).get(0);
+        double empiricalProportionWithinOneSigma = proportions.get(0).get(0) - proportions.get(0).get(1);
 
         //the proportion within one sigma for the normal distribution
         //hence whether any element falls within one sigma is a Bernoulli variable
