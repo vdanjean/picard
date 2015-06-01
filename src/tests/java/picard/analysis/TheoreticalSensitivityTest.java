@@ -60,9 +60,62 @@ public class TheoreticalSensitivityTest {
         Assert.assertEquals(proportions.get(2).get(0), (double) 3/4);
         Assert.assertEquals(proportions.get(2).get(1), (double) 3/4);
         Assert.assertEquals(proportions.get(2).get(2), (double) 1/4);
-
-
-
     }
 
+    @Test
+    public void testHetAltDepthDistribution() throws Exception {
+        int N = 6;
+        double p = 0.5;
+        List<ArrayList<Double>> distribution = TheoreticalSensitivity.hetAltDepthDistribution(N);
+
+        for (int n = 0; n < N-1; n++) {
+            for (int m = 0; m <= n; m++) {
+                //java has no built-in binomial coefficient
+                //when this is in hellbender, use apache commons
+                int binomialCoefficient = 1;
+                for (int i = n; i > (n - m); i--) binomialCoefficient *= i;
+                for (int i = m; i > 0; i--) binomialCoefficient /= i;
+
+                Assert.assertEquals(distribution.get(n).get(m), binomialCoefficient*Math.pow(p,n));
+            }
+        }
+    }
+
+    //test that large-sample sums from the RouletteWheel converge to a normal distribution
+    //using the empirical CDF as measured by proportionsAboveThresholds
+    @Test
+    public void testCentralLimitTheorem() throws Exception {
+        //use a RouletteWheel that gives 0, 1, 2 with equal probability
+        List<Double> weights = Arrays.asList(1.0, 1.0, 1.0);
+        final TheoreticalSensitivity.RouletteWheel wheel = new TheoreticalSensitivity.RouletteWheel(weights);
+
+        int sampleSize = 1000;
+        int numSummands = 100;
+
+        //the mean and standard deviation of a single roulette draw and of many draws
+        double muSingleDraw = 1.0;
+        double sigmaSingleDraw = Math.sqrt(2.0 / 3.0);
+        double mu = numSummands * muSingleDraw;
+        double sigma = Math.sqrt(numSummands) * sigmaSingleDraw;
+
+        //test the sums of this deterministic wheel: a sum of n 1's equals n
+        List<ArrayList<Integer>> sums = wheel.sampleCumulativeSums(numSummands, sampleSize);
+        //we only want the last set of sums, those with numSummands summands
+        sums.subList(0, sums.size() - 1).clear();
+
+        //test whether the number of elements within one standard deviation agrees with the normal distribution
+        List<Double> thresholds = Arrays.asList(mu - sigma, mu + sigma);
+
+        //sums is 1 x sampleSize, thresholds is a 2-vector, so proportions is 1 x 2
+        List<ArrayList<Double>> proportions = TheoreticalSensitivity.proportionsAboveThresholds(sums, thresholds);
+        double empiricalProportionWithinOneSigma = proportions.get(0).get(1) - proportions.get(0).get(0);
+
+        //the proportion within one sigma for the normal distribution
+        //hence whether any element falls within one sigma is a Bernoulli variable
+        double theoreticalProportionWithinOneSigma = 0.682689492;
+        double samplingStandardDeviationOfProportion = Math.sqrt(theoreticalProportionWithinOneSigma*(1-theoreticalProportionWithinOneSigma) /  sampleSize);
+
+        Assert.assertEquals(empiricalProportionWithinOneSigma, theoreticalProportionWithinOneSigma, 5*samplingStandardDeviationOfProportion);
+
+    }
 }
