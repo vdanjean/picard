@@ -13,7 +13,7 @@ public class TheoreticalSensitivity {
     @param logOddsThreshold is the log_10 of the likelihood ratio required to call a SNP,
     for example 5 if the variant likelihood must be 10^5 times greater
      */
-    public double hetSNPSensitivity(final List<Double> depthDistribution, final List<Double> qualityDistribution,
+    public static double hetSNPSensitivity(final List<Double> depthDistribution, final List<Double> qualityDistribution,
                                   final int sampleSize, final double logOddsThreshold) {
         int N = depthDistribution.size();
         RouletteWheel qualitySampler = new RouletteWheel(qualityDistribution);

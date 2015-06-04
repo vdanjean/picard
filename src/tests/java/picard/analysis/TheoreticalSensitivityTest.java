@@ -7,6 +7,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Arrays;
 
@@ -118,6 +119,33 @@ public class TheoreticalSensitivityTest {
         double samplingStandardDeviationOfProportion = Math.sqrt(theoreticalProportionWithinOneSigma*(1-theoreticalProportionWithinOneSigma) /  sampleSize);
 
         Assert.assertEquals(empiricalProportionWithinOneSigma, theoreticalProportionWithinOneSigma, 5*samplingStandardDeviationOfProportion);
+    }
 
+    //Put it all together for deterministic quality and depths
+    @Test
+    public void testDeterministicQualityAndDepth() throws Exception {
+        double logOddsThreshold = 0.0;
+        double tolerance = 0.001;
+        int sampleSize = 1; //quality is deterministic, hence no sampling error
+        for (int q = 5; q < 10; q++) {
+            for (int n = 5; n < 10; n++) {
+                double minAltCount = 10*n*Math.log10(2)/q;  //alts required to call when log odds ratio threshold = 1
+                double expectedResult = 0.0;
+
+                List<ArrayList<Double>> altCountProbabilities = TheoreticalSensitivity.hetAltDepthDistribution(n+1);
+                for (int altCount = n; altCount > minAltCount; altCount--) {
+                    expectedResult += altCountProbabilities.get(n).get(altCount);
+                }
+
+                //deterministic weights that always yield q are 0.0 for 0 through q - 1 and 1.0 for q
+                List<Double> qualityDistribution = new ArrayList<Double>(Collections.nCopies(q, 0.0));
+                qualityDistribution.add(1.0);
+                List<Double> depthDistribution = new ArrayList<Double>(Collections.nCopies(n, 0.0));
+                depthDistribution.add(1.0);
+
+                double result = TheoreticalSensitivity.hetSNPSensitivity(depthDistribution, qualityDistribution, sampleSize, logOddsThreshold);
+                Assert.assertEquals(result, expectedResult, tolerance);
+            }
+        }
     }
 }
