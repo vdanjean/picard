@@ -48,13 +48,35 @@ import java.util.List;
  * @author Tim Fennell
  */
 @CommandLineProgramProperties(
-        usage = "Program to chart " +
-                "quality score distributions in a SAM or BAM file.",
-        usageShort = "Charts quality score distributions for a SAM or BAM file",
+        usage = QualityScoreDistribution.USAGE_SUMMARY + QualityScoreDistribution.USAGE_DETAILS,
+        usageShort = QualityScoreDistribution.USAGE_SUMMARY,
         programGroup = Metrics.class
 )
 public class QualityScoreDistribution extends SinglePassSamProgram {
-
+    static final String USAGE_SUMMARY = "Program to chart quality score distributions in a SAM or BAM file.  ";
+    static final String USAGE_DETAILS = "This tool is used for determining the overall \"quality\" of a given run. "+
+            "Provides both chart and table outputs, indicating the range of quality scores and the total" +
+            " numbers of bases corresponding to those scores." +
+            "  Options include plotting " +
+            "the distribution of all of the reads, only the aligned reads, or reads that have passed the Illumina " +
+            "Chastity filter thresholds*.  This filtration process removes the least reliable clusters from the image analysis results. " +
+            "<br /> <br />" +
+            "If the original quality score (OQ) tag is present, the histogram will plot both the OQ and the " +
+            "recalibrated quality scores obtained from the BaseRecalibrator tool of GATK.  For additional information on the BaseRecalibrator, please see:" +
+            "<br /><br />www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_bqsr_BaseRecalibrator.php  "+
+            "<h4>Usage Example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar QualityScoreDistribution \\<br />" +
+            "      I=input.bam \\<br />" +
+            "      O=qualityScoreDistributionOutput.txt \\<br />" +
+            "      CHART=qualityScoreDistribution.pdf" +
+            "</pre>" +
+            "*Chastity is defined as the ratio of the brightest base intensity divided by the sum of the " +
+            "brightest and second brightest base intensities.  Clusters \"pass filter\" if no more than 1 base call has" +
+            " a chastity value below 0.6 in the first 25 cycles.  For additional information, please see:" +
+            "     <li> support.illumina.com/content/dam/illumina-marketing/documents/products/technotes/hiseq-x-percent-pf-technical-note-770-2014-043.pdf" +
+            "     <li> support.illumina.com/content/dam/illumina-support/documents/documentation/system_documentation/hiseqx/hiseq-x-user-guide-15050091c.pdf." +
+            "<hr />";
     @Option(shortName="CHART", doc="A file (with .pdf extension) to write the chart to.")
     public File CHART_OUTPUT;
 

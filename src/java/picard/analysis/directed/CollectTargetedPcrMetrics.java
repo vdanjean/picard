@@ -17,15 +17,38 @@ import java.util.Set;
  * more information
  */
 @CommandLineProgramProperties(
-        usage = "Calculates a set of metrics to Illumina Truseq Custom Amplicon sequencing from an aligned SAM" +
-                "or BAM file. If a reference sequence is provided, AT/GC dropout metrics will " +
-                "be calculated, and the PER_TARGET_COVERAGE option can be used to output GC and " +
-                "mean coverage information for every target.",
-        usageShort = "Produces Targeted PCR-related metrics given the provided SAM/BAM",
+        usage = CollectTargetedPcrMetrics.USAGE_SUMMARY + CollectTargetedPcrMetrics.USAGE_DETAILS,
+        usageShort = CollectTargetedPcrMetrics.USAGE_SUMMARY,
         programGroup = Metrics.class
 )
 public class CollectTargetedPcrMetrics extends CollectTargetedMetrics<TargetedPcrMetrics, TargetedPcrMetricsCollector> {
-
+    static final String USAGE_SUMMARY = "Produces targeted PCR-related metrics for a given SAM/BAM file.  ";
+    static final String USAGE_DETAILS = "This tool calculates a set of metrics to TSCA sequencing from an aligned SAM or" +
+            "BAM file.  TruSeq Custom Amplicon (TSCA) is an Illumina kit that allows researchers to sequence targeted " +
+            "regions of interest in a genome.  Although there are many applications for using this targeted " +
+            "approach, it is frequently used for genomic regions of high or low GC content.  For additional information, please see:" +
+            "<br /><br />" +
+            "www.illumina.com/content/dam/illumina-marketing/documents/products/datasheets/datasheet_truseq_custom_amplicon.pdf." +
+            "<br /><br />" +
+            "If a reference sequence is provided, AT/GC dropout metrics will be calculated and the PER_TARGET_COVERAGE" +
+            " option can be used to output GC content and mean coverage information for each target.  " +
+            "The AT/GC dropout metrics indicate the degree of inadequate coverage of a " +
+            "particular region based on its AT or GC content." +
+            "The PER_TARGET_COVERAGE option can be used to output GC content and mean sequence depth information for every target interval.  " +
+            "<br /><br />Please note that coverage depth at each locus should not exceed a limit of java MAX_SHORT ~32K.  This is because the " +
+            "CollectTargetedPcrMetrics (and the CalculateHsMetrics) tool, use a short array (as in short [] ) to calculate coverage metrics." +
+            "<h4>Usage Example</h4>" +
+            "<pre>" +
+            "java -jar picard.jar CollectTargetedPcrMetrics \\<br /> " +
+            "      I=input.bam \\<br /> " +
+            "      O=PCRMetrics.bam \\<br /> " +
+            "      R=referenceSequence.fasta \\<br /> " +
+            "      AMPLICON_INTERVALS=amplicon_intervallist.vcf \\<br /> " +
+            "      TARGET_INTERVALS=targeted_intervallist.vcf " +
+            "</pre>" +
+            "For explanations of the output metrics, see " +
+            "http://broadinstitute.github.io/picard/picard-metric-definitions.html#TargetedPcrMetrics" +
+            "<hr />";
     @Option(shortName = "AI", doc = "An interval list file that contains the locations of the baits used.")
     public File AMPLICON_INTERVALS;
 

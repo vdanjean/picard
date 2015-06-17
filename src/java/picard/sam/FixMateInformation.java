@@ -64,15 +64,25 @@ import java.util.List;
  * @author Tim Fennell
  */
 @CommandLineProgramProperties(
-        usage = "Ensure that all mate-pair information is in sync between each read " +
-                "and its mate pair.  If no OUTPUT file is supplied then the output is written to a temporary file " +
-                "and then copied over the INPUT file.  Reads marked with the secondary alignment flag are written " +
-                "to the output file unchanged.",
-        usageShort = "Ensure that all mate-pair information is in sync between each read and its mate pair",
+        usage = FixMateInformation.USAGE_SUMMARY + FixMateInformation.USAGE_DETAILS,
+        usageShort = FixMateInformation.USAGE_SUMMARY,
         programGroup = SamOrBam.class
 )
 public class FixMateInformation extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Ensure that all mate-pair information is in sync between each read and its mate pair";
+    static final String USAGE_DETAILS = "Ensure that all mate-pair information is in sync between each read " +
+            "and its mate pair.  If no OUTPUT file is supplied then the output is written to a temporary file " +
+            "and then copied over the INPUT file.  Reads marked with the secondary alignment flag are written " +
+            "to the output file unchanged." +
+            "" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar FixMateInformation \\<br /> " +
+            "      I=myBAM.bam \\ <br /> " +
+            "      O=fixed_BAM.bam" +
+            "</pre> " +
+            "For information on the SAM format, please see: http://samtools.sourceforge.net" +
+            "<hr />";
     @Option(shortName = StandardOptionDefinitions.INPUT_SHORT_NAME, doc = "The input file to fix.")
     public List<File> INPUT;
 

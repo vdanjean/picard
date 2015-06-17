@@ -50,12 +50,23 @@ import java.net.URL;
  * @author Martha Borkan
  */
 @CommandLineProgramProperties(
-        usage = "Generates a BAM index (.bai) file.",
-        usageShort = "Generates a BAM index (.bai) file",
+        usage = BuildBamIndex.USAGE_SUMMARY + BuildBamIndex.USAGE_DETAILS,
+        usageShort = BuildBamIndex.USAGE_SUMMARY,
         programGroup = SamOrBam.class
 )
 public class BuildBamIndex extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Generates a BAM index \".bai\" file.  ";
+    static final String USAGE_DETAILS = "The BAM index file is an essential functional component for many of the Picard tools.  " +
+            "Index files provide easy random access to the detailed information in the main file." +
+            "" +
+            "The index command creates a new index file that allows fast look-up of data in a (sorted) SAM or BAM. " +
+            "Like an index on a database, the generated \".sam.sai\" or \".bam.bai\" file facilitates efficient data retrieval within the associated files." +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar BuildBamIndex \\<br />" +
+            "      I=mybamfile.bam" +
+            "</pre>" +
+            "<hr />";
     private static final Log log = Log.getInstance(BuildBamIndex.class);
 
     @Option(shortName = StandardOptionDefinitions.INPUT_SHORT_NAME,

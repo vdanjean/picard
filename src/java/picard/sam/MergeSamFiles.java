@@ -52,13 +52,30 @@ import java.util.List;
  * @author Tim Fennell
  */
 @CommandLineProgramProperties(
-        usage = "Merges multiple SAM/BAM files into one file.",
-        usageShort = "Merges multiple SAM or BAM files into one file",
+        usage = MergeSamFiles.USAGE_SUMMARY + MergeSamFiles.USAGE_DETAILS,
+        usageShort = MergeSamFiles.USAGE_SUMMARY,
         programGroup = SamOrBam.class
 )
 public class MergeSamFiles extends CommandLineProgram {
     private static final Log log = Log.getInstance(MergeSamFiles.class);
 
+    static final String USAGE_SUMMARY = "Merges multiple \".sam\" and/or \".bam\" files into one file.  ";
+    static final String USAGE_DETAILS = "This tool is used for combining \".sam\" and/or \".bam\" files from different runs or read groups.  " +
+            "<br /><br />To prevent errors in downstream processing, it is critical to identify/label read groups appropriately." +
+            "If different samples contain identical read group IDs, this tool will prevent collisions by modifying the read group IDs to be unique.  " +
+            "This tool is similar to the \"merge\" function of Samtools (http://www.htslib.org/doc/samtools.html).  " +
+            "<br /><br />This program should not be used to combine \".sam\" and/or \".bam\" files that are aligned to different reference sequences." +
+            "<br />" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar MergeSamFiles \\<br />" +
+            "      I=myBAM1.bam \\<br />" +
+            "      I=myBAM2.bam \\<br />" +
+            "      O=my_mergedBAM.bam" +
+            "</pre>" +
+            "For additional information on \".sam\" and \".bam\" files, please see: http://samtools.github.io/hts-specs/SAMv1.pdf" +
+            "<hr />"
+           ;
     @Option(shortName = "I", doc = "SAM or BAM input file", minElements = 1)
     public List<File> INPUT = new ArrayList<File>();
 

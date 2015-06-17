@@ -62,14 +62,66 @@ import static htsjdk.variant.variantcontext.VariantContext.Type.*;
  * @author George Grant
  */
 @CommandLineProgramProperties(
-        usage = "Calculates the concordance between genotype data for two samples in two different VCFs - one being considered the truth (or reference) " +
-                "the other being considered the call.  The concordance is broken into separate results sections for SNPs and indels.  Summary and detailed statistics are reported\n\n" +
-                "Note that for any pair of variants to compare, only the alleles for the samples under interrogation are considered " +
-                "and MNP, Symbolic, and Mixed classes of variants are not included.",
-        usageShort = "Calculates the concordance between genotype data for two samples in two different VCFs",
+        usage = GenotypeConcordance.USAGE_SUMMARY + GenotypeConcordance.USAGE_DETAILS,
+        usageShort =  GenotypeConcordance.USAGE_SUMMARY,
         programGroup = VcfOrBcf.class
 )
 public class GenotypeConcordance extends CommandLineProgram {
+    static final String USAGE_SUMMARY = "Calculates the concordance between genotype data for samples in two different" +
+            "VCFs, your callset and a standard or 'truthset'.";
+    static final String USAGE_DETAILS = "Genotype concordance is the fraction of validated genotypes within the total " +
+            "number of validated variant alleles (alleles validated against a gold-standard or truthset).  " +
+            "Useful definitions applicable to alleles and genotypes for this tool include:<br /> " +
+            "TP - True positives are variant alleles/genotypes that match a 'truthset'<br />" +
+            "Truthset - A VCF containing variant alleles that have been cross-validated with multiple" +
+            " technologies e.g. Genome In A Bottle Consortium (GIAB) (https://sites.stanford.edu/abms/giab)<br />" +
+            "FP - False-positives are reference alleles miscalled as variant alleles<br />" +
+            "FN - False-negatives are variant alleles miscalled as reference alleles<br />" +
+            "TN - True negatives are correctly called reference alleles<br />" +
+            "Validated genotypes - are TP genotypes <br />  "     +
+
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar GenotypeConcordance \\<br />" +
+            "      CALL_VCF=VCF1.vcf \\<br />" +
+            "      O=GConcordance.vcf \\<br />" +
+            "      TRUTH_VCF=Truthset.vcf \\<br />" +
+            "      TRUTH_SAMPLE=Truthsample#" +
+            "</pre>" +
+            "" +
+            "<h4>Output Metrics:</h4>" +
+            "Output metrics include GenotypeConcordanceContingencyMetrics, GenotypeConcordanceSummaryMetrics, and " +
+            "GenotypeConcordanceDetailMetrics.  For each set of metrics, the data is broken into separate sections for " +
+            "SNPs and INDELs.  Note that only SNP and INDEL variants are considered, MNP, Symbolic, and Mixed classes" +
+            " of variants are not included. <br /><br /> " +
+
+            "GenotypeConcordanceContingencyMetrics enumerate the constituents of each contingent in a callset " +
+            "including true-positive (TP), true-negative (TN), false-positive (FP), and false-negative (FN) calls.  Please see " +
+            "http://broadinstitute.github.io/picard/picard-metric-definitions.html#GenotypeConcordanceContingencyMetrics" +
+            " for additional details.<br /><br />  " +
+            "" +
+            "GenotypeConcordanceDetailMetrics include the numbers of SNPs and INDELs for each contingent genotype as well " +
+            "as the number of validated genotypes.  " +
+            "For example an output can contain the numbers of heterozygous genotypes in a callset, meaning one " +
+            "reference and one variant allele (HET_REF_VAR1) as well as the number of HET_REF_VAR1 that have" +
+            " corresponding matches in the truthset are output.      " +
+            "For additional details, please see " +
+            "http://broadinstitute.github.io/picard/picard-metric-definitions.html#GenotypeConcordanceDetailMetrics. " +
+            "<br /><br /> "+
+            "" +
+            "GenotypeConcordanceSummaryMetrics provide specific details for the variant caller performance on a callset including: " +
+            "values for sensitivity, specificity, and positive predictive values.  Variant caller sensitivity is the " +
+            "fraction of variant calls detected that match the truthset [TP/(TP + FN)].  Specificity" +
+            "is a measure of variant calling accuracy and is the fraction of correctly called reference alleles over " +
+            "the total number of reference alleles in the truthset [TN/(FP + TN)]." +
+            "The positive predictive value (PPV) is another measure of variant calling accuracy and is calculated by dividing the" +
+            " number of valid variant calls (TP) by the entire pool of variants in a callset [TP/(TP + FP)].<br /><br />" +
+            "Please see " +
+            "http://broadinstitute.github.io/picard/picard-metric-definitions.html#GenotypeConcordanceSummaryMetrics " +
+            "for additional details of metric calculations." +
+            "" +
+            "<hr />"
+            ;
     @Option(shortName = "TV", doc="The VCF containing the truth sample")
     public File TRUTH_VCF;
 

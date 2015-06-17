@@ -33,12 +33,23 @@ import java.util.Set;
  */
 
 @CommandLineProgramProperties(
-        usage = "Writes an interval list based on splitting the reference by Ns.",
-        usageShort = "Writes an interval list based on splitting the reference by Ns",
+        usage = ScatterIntervalsByNs.USAGE_SUMMARY + ScatterIntervalsByNs.USAGE_DETAILS,
+        usageShort = ScatterIntervalsByNs.USAGE_SUMMARY,
         programGroup = Intervals.class
 )
 public class ScatterIntervalsByNs extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "A tool for breaking up a reference into intervals of Ns and ACGTs bases.  ";
+    static final String USAGE_DETAILS = "This tool is used for creating a broken-up interval list for calling whole genome sequence (WGS).  " +
+            "Writes an interval list based on splitting the reference by uncalled or ambiguous bases (Ns).<br />" +
+            "Might be used to identify regions of the reference that may cause downstream analysis problems. " +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar ScatterIntervalsByNs \\<br />" +
+            "      R=human_b37_20.fasta \\<br />" +
+            "      OT=BOTH \\<br />" +
+            "      O=b37.interval_list" +
+            "</pre>" +
+            "<hr />";
     @Option(shortName = StandardOptionDefinitions.REFERENCE_SHORT_NAME, doc = "Reference sequence to use.")
     public File REFERENCE;
 

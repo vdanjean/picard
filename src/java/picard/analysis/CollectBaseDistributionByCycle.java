@@ -19,13 +19,54 @@ import picard.cmdline.Option;
 import picard.cmdline.programgroups.Metrics;
 import picard.util.RExecutor;
 
+
+
 @CommandLineProgramProperties(
-        usage = "Program to chart the nucleotide distribution per cycle in a SAM or BAM file.",
-        usageShort = "Program to chart the nucleotide distribution per cycle in a SAM or BAM file.",
+        usage = CollectBaseDistributionByCycle.USAGE_SUMMARY + CollectBaseDistributionByCycle.USAGE_DETAILS,
+        usageShort = CollectBaseDistributionByCycle.USAGE_SUMMARY,
         programGroup = Metrics.class
 )
 public class CollectBaseDistributionByCycle extends SinglePassSamProgram {
+        static final String USAGE_SUMMARY = "Program to chart the nucleotide distribution per cycle in a SAM or BAM file";
+        static final String USAGE_DETAILS = "This program charts the nucleotide distribution per cycle in a SAM or BAM file " +
+                "to enable assessments of systematic errors at specific positions in the reads.<br /><br />" +
+                "" +
+                "Although the the use of this tool is described for the Illumina sequencing platform, it can be used for" +
+                " any high-throughput sequencing technology including SOLiD/Ion Torrent (Life Technologies), 454 (Roche), " +
+                "Nanopore (Oxford Nanopore Technolgies), and PACBIO RS II (Pacific Biosciences).<br /><br /> " +
 
+                "The Illumina sequencing platform carries out a sequence by synthesis process, whereby each cycle represents " +
+                "the addition of a new nucleotide to a growing oligonucleotide chain.  " +
+                "The growing synthetic oligonucleotide chains are represented as the observed reads in a sequencing run.  " +
+                "However, as the run progresses, the accuracy of nucleotide incorporation by the DNA polymerase can degrade, such that " +
+                "base calls become ambiguous towards the end of a run and are indicated as unassigned nucleotides \"N\"s in" +
+                " a read.  Other sources of errors include the inadequate flushing of the flow cell, which lead to " +
+                "inaccurate base calls that accumulate at each subsequent cycle.  However, each sequencing instrument platform can" +
+                " have unique sources of systematic errors e.g. A-T bias (SOLiD), deletions (Oxford Nanopore), and " +
+                "homopolymers (Roche) etc.  Sequencing platform evaluations and comparisons can be found at: " +
+                "http://www.molecularecologist.com/next-gen-table-3c-2014/ <br /><br />" +
+                "" +
+                "Using the CollectBaseDistributionByCycle tool, increased numbers of miscalled bases will be reflected " +
+                "in both base distribution changes and increases in the number of \"N\"s.  " +
+                "In general, we expect that for any given cycle, or position within reads, the relative proportions of " +
+                "A, T, C and G should reflect the AT:GC content of the organism's genome.  Thus, for all four nucleotides, flattish lines " +
+                "would be expected.  Deviations from this expectation, for example a spike of A at a particular " +
+                "cycle (position within reads), would suggest a systematic sequencing error."+
+                "" +
+                "Although previous workflows involved the discarding of low-quality tails through quality trimming, " +
+                "GATK's current Best Practices includes the Base Quality Score Recalibrator (BQSR) tool.  The BQSR tool is " +
+                "quality-aware and will handle systemic biases that covary with the reads, thus reducing systematic errors " +
+                "in a platform-independent manner.  For more information on the GATK Best Practices workflow, visit:" +
+                " http://www.broadinstitute.org/gatk/guide/best-practices/"+
+                "" +
+                "<br /><h4>Usage example:</h4>" +
+                "<pre>" +
+                "java -jar picard.jar CollectBaseDistributionByCycle \\<br />" +
+                "      CHART=collectbasedistbycycle.pdf \\<br />" +
+                "      I=input.bam \\<br />" +
+                "      O=output.txt" +
+                "</pre>" +
+                "<hr />";
     @Option(shortName = "CHART", doc = "A file (with .pdf extension) to write the chart to.")
     public File CHART_OUTPUT;
 

@@ -21,10 +21,8 @@ import java.util.List;
  * @author Tim Fennell
  */
 @CommandLineProgramProperties(
-        usage = "Takes an input BAM and reference sequence and runs one or more Picard " +
-                "metrics modules at the same time to cut down on I/O. Currently all programs are run with " +
-                "default options and fixed output extesions, but this may become more flexible in future.",
-        usageShort = "A \"meta-metrics\" calculating program that produces multiple metrics for the provided SAM/BAM",
+        usage = CollectMultipleMetrics.USAGE_SUMMARY + CollectMultipleMetrics.USAGE_DETAILS,
+        usageShort = CollectMultipleMetrics.USAGE_SUMMARY,
         programGroup = Metrics.class
 )
 public class CollectMultipleMetrics extends CommandLineProgram {
@@ -33,6 +31,27 @@ public class CollectMultipleMetrics extends CommandLineProgram {
      * This interface allows developers to create Programs to run in addition to the ones defined in the Program enum.
      * Includes a method for determining whether or not a Program explicitly needs a reference sequence (i.e. cannot be null)
      */
+
+    static final String USAGE_SUMMARY ="A \"meta-metrics\" calculating program that produces multiple metrics for the provided SAM/BAM.  ";
+    static final String USAGE_DETAILS ="Takes an input BAM and reference sequence and runs one or more Picard " +
+            "metrics modules at the same time to cut down on I/O.  These include CollectAlignmentSummaryMetrics, " +
+            "CollectInsertSizeMetrics, QualityScoreDistribution,  MeanQualityByCycle, and " +
+            "CollectBaseDistributionByCycle.  Produces a pdf and a txt file for each tool with the exception of the " +
+            "CollectAlignmentSummaryMetrics tool, which outputs only a txt file.  To view the \"txt\" files, add " +
+            " \".txt\" to the suffix of each output file (but not the \".pdf\" files)." +
+            "<br /><br />" +
+            "" +
+            "Currently all programs are run with default options and fixed output extensions, " +
+            "but this may become more flexible in future.  Reference sequence file is required." +
+            "<br />" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar MeanQualityByCycle \\<br />" +
+            "      I=input.bam \\<br />" +
+            "      O=mm_output.txt \\<br />" +
+            "      R=reference_sequence.fasta <br /> " +
+            "</pre>" +
+            "<hr />";
     public static interface ProgramInterface {
         SinglePassSamProgram makeInstance(final String outbase, final File input, final File reference);
         public boolean needsReferenceSequence();

@@ -45,14 +45,24 @@ import java.io.File;
  * @author Martha Borkan
  */
 @CommandLineProgramProperties(
-        usage = "Generates BAM index statistics, including the number of aligned and unaligned SAMRecords for each reference sequence, " +
-                "and the number of SAMRecords with no coordinate." +
-                "Input BAM file must have a corresponding index file.\n",
-        usageShort = "Generates index statistics from a BAM file",
+        usage = BamIndexStats.USAGE_SUMMARY + BamIndexStats.USAGE_DETAILS,
+        usageShort = BamIndexStats.USAGE_SUMMARY,
         programGroup = SamOrBam.class
 )
 public class BamIndexStats extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Generates index statistics from a BAM file";
+    static final String USAGE_DETAILS = "This tool enables the user to obtain statistics from a BAM index (.bai) file.  " +
+            "Statistics include count of aligned and unaligned reads as well as a count of all records with no start" +
+            " coordinate. Input BAM file must have a corresponding index file.<br />" +
+            "" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar BamIndexStats \\<br />" +
+            "      I=Mybamfile.bam \\<br />" +
+            "      #:/BamindexStats.txt" +
+            "</pre>"   +
+    "Similar to the \"samtools idxstats\" command.  For additional information, please see: http://samtools.sourceforge.net/. " +
+            "<hr />"       ;
     private static final Log log = Log.getInstance(BamIndexStats.class);
 
     @Option(shortName= StandardOptionDefinitions.INPUT_SHORT_NAME,

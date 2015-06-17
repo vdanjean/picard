@@ -32,14 +32,25 @@ import java.util.List;
  * the same sequence dictionaries
  */
 @CommandLineProgramProperties(
-        usage = "Sorts one or more VCF files according to the order of the contigs in the header/sequence dictionary and then by coordinate. " +
-        "Can accept an external sequence dictionary. If no external dictionary is supplied, multiple inputs' headers must have " +
-        "the same sequence dictionaries. Multiple inputs must have the same sample names (in order)\n",
-        usageShort = "Sorts one or more VCF files",
+        usage = SortVcf.USAGE_SUMMARY + SortVcf.USAGE_DETAILS,
+        usageShort = SortVcf.USAGE_SUMMARY,
         programGroup = VcfOrBcf.class
 )
 public class SortVcf extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Sorts one or more VCF files.  ";
+    static final String USAGE_DETAILS = "Sorts VCF files according to the order of the contigs " +
+            "in the header/sequence dictionary and then by coordinate.  Can accept an external sequence dictionary.  " +
+            "However, the VCF file headers must at least have the same sequence dictionaries if using multiple inputs and no external dictionary is supplied." +
+            "<br /><br />Prior to running the tool, multiple inputs must have the same sample names and be sorted in the same order.  Use Rename_Sample_In_Vcf tool if the INPUT VCF files have different SAMPLE names." +
+            "<br />" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar SortVcf \\<br />" +
+            "      I=VCF1.vcf \\<br />" +
+            "      I=VCF2.vcf \\<br />" +
+            "      O=sortedvcfs.vcf" +
+            "</pre>" +
+            "<hr />" ;
     @Option(shortName = StandardOptionDefinitions.INPUT_SHORT_NAME, doc = "Input VCF(s) to be sorted. Multiple inputs must have the same sample names (in order)")
     public List<File> INPUT;
 

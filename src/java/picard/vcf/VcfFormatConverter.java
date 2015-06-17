@@ -53,12 +53,25 @@ import java.io.File;
  * @author jgentry@broadinstitute.org
  */
 @CommandLineProgramProperties(
-        usage = "Convert a VCF file to a BCF file, or BCF to VCF.\n" +
-                "Input and output formats are determined by file extension.",
-        usageShort = "Converts a VCF file to a BCF file, or BCF to VCF",
+        usage = VcfFormatConverter.USAGE_SUMMARY + VcfFormatConverter.USAGE_DETAILS,
+        usageShort = VcfFormatConverter.USAGE_SUMMARY,
         programGroup = VcfOrBcf.class
 )
 public class VcfFormatConverter extends CommandLineProgram {
+    static final String USAGE_SUMMARY = "Converts a VCF file to a binary VCF (BCF) file, or BCF to VCF.  ";
+    static final String USAGE_DETAILS = "Input and output formats are determined by file extensions specified in the file names.  For best results," +
+            " it is recommended to set the REQUIRE_INDEX option to true. If no \".idx\" file is available, load your " +
+            "VCF file into the Integrative Genomics Viewer (IGV) software.  You will see popup menu to create an \".idx\" file." +
+            "<br />" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar VcfFormatConverter \\<br />" +
+            "      I=myVCF.vcf \\<br />" +
+            "      O=myBCF.bcf \\<br />" +
+            "      REQUIRE_INDEX=true" +
+            "</pre>"+
+            "For information about IGV tools, please see: http://www.broadinstitute.org/software/igv/home"+
+            "<hr />";
     // The following attributes define the command-line arguments
     public static final Log LOG = Log.getInstance(VcfFormatConverter.class);
 

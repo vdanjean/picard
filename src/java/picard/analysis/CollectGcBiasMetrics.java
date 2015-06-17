@@ -59,15 +59,54 @@ import java.util.Set;
  * edited by Kylee Bergin
  */
 @CommandLineProgramProperties(
-        usage = "Tool to collect information about GC bias in the reads in a given BAM file. Computes" +
-                " the number of windows (of size specified by WINDOW_SIZE) in the genome at each GC%" +
-                " and counts the number of read starts in each GC bin.  What is output and plotted is" +
-                " the \"normalized coverage\" in each bin - i.e. the number of reads per window normalized" +
-                " to the average number of reads per window across the whole genome..\n",
-        usageShort = "Collects information about GC bias in the reads in the provided SAM or BAM",
+        usage = CollectGcBiasMetrics.USAGE_SUMMARY + CollectGcBiasMetrics.USAGE_DETAILS,
+        usageShort = CollectGcBiasMetrics.USAGE_SUMMARY,
         programGroup = Metrics.class
 )
 public class CollectGcBiasMetrics extends SinglePassSamProgram {
+    static final String USAGE_SUMMARY = "Collects information regarding GC bias, from a SAM/BAM input file.  ";
+    static final String USAGE_DETAILS = "Tool that collects information about the proportions of guanine (G) and cytosine (C)" +
+            " nucleotides in a sample.  Regions of high and low G + C content have been shown to interfere with mapping/aligning," +
+            " ultimately leading to low read depth and fragmented genome assemblies, a phenomenon known as \"GC bias\".  " +
+            "Detailed information on the effects GC-bias on NGS data can be found at DOI: 10.1371/journal.pone.0062856/.<br /><br />." +
+            "" +
+            "For each run, the corresponding reference sequence is divided into bins or windows based on the percentage of G + C" +
+            " content ranging from 0 - 100%.  The percentages of G + C are determined from a defined length of sequence, the default " +
+            "value is set at 100 bases.   " +
+            "Although the mean of the distribution will vary among organisms, human DNA has a mean GC-content of 40%, suggesting " +
+            "preponderance of AT-rich regions.  <br /><br />" +
+
+            "GC bias is calculated and output as both summary (optional) and detailed metrics (required).  " +
+            "The GcBiasSummaryMetrics provides high-level metrics that capture run-specific bias information including" +
+            " WINDOW_SIZE, ALIGNED_READS, TOTAL_CLUSTERS, AT_DROPOUT, and GC_DROPOUT.  While WINDOW_SIZE refers to the" +
+            "numbers of bases used for the distribution (see above), the ALIGNED_READS and" +
+            " TOTAL_CLUSTERS are the total number of aligned reads and the total number of reads (after filtering) " +
+            "produced in a run.   In addition, the tool produces both AT_DROPOUT and GC_DROPOUT metrics, which indicate the percentage of" +
+            " reads dropped from an analysis due to the inability to map to the reference as result of excessively" +
+            " GC-poor or GC-rich regions respectfully. <br /><br />" +
+            "" +
+            "GcBiasDetailedMetrics produces both a chart (pdf) and a table of data.  These data include GC percentages " +
+            "for each bin (GC), the numbers of windows corresponding to each bin (WINDOWS), the numbers of reads that start within a bin (READ_STARTS), " +
+            "and the mean base quality of the reads that correspond to a specific GC-content distribution window (MEAN_BASE_QUALITY)." +
+            "  In addition, NORMALIZED_COVERAGE is a relative measure of sequence coverage by the reads at a particular GC-content." +
+            "  The percentage of \"coverage\" or depth in a GC bin is calculated by dividing the number of reads of a particular GC content, " +
+            "by the mean number of reads of all GC bins.  A number of 1 represents mean coverage, a number less than " +
+            "one represents lower than mean coverage (e.g. 0.5 means half as much coverage as average) while a " +
+            "number greater than one represents higher than mean coverage (e.g. 3.1 means this GC bin has 3.1 times" +
+            " more reads per window than average).  Tool also plots mean base-quality scores of the reads within each" +
+            " GC-content bin, enabling the user to determine how base-quality scores vary with GC-content.<br />"+
+
+            "<h4>Usage Example:</h4>"+
+            "<pre>" +
+            "java -jar picard.jar CollectGcBiasMetrics \\<br />"+
+            "      I=input.bam \\<br />"+
+            "      O=gcBiasMetrics.txt \\<br />"+
+            "      CHART=gcBiasMetrics.pdf \\<br />"+
+            "      R=referencesequence.fasta"+
+            "</pre>"+
+            "For detailed explanations of the output metrics, please see: " +
+            "https://broadinstitute.github.io/picard/picard-metric-definitions.html#GcBiasMetrics" +
+            "<hr />";
     /** The location of the R script to do the plotting. */
     private static final String R_SCRIPT = "picard/analysis/gcBias.R";
 

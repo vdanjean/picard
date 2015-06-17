@@ -57,12 +57,36 @@ import java.util.*;
  * @author Nils Homer
  */
 @CommandLineProgramProperties(
-        usage = "Examines aligned records in the supplied SAM or BAM file to locate duplicate molecules. " +
-                "All records are then written to the output file with the duplicate records flagged.",
-        usageShort = "Examines aligned records in the supplied SAM or BAM file to locate duplicate molecules.",
+        usage = MarkDuplicatesWithMateCigar.USAGE_SUMMARY + MarkDuplicatesWithMateCigar.USAGE_DETAILS,
+        usageShort =  MarkDuplicatesWithMateCigar.USAGE_SUMMARY,
         programGroup = SamOrBam.class
 )
 public class MarkDuplicatesWithMateCigar extends AbstractMarkDuplicatesCommandLineProgram {
+    static final String USAGE_SUMMARY = "Duplication marking algorithm.  ";
+    static final String USAGE_DETAILS = "This algorithm may be the most effective duplicate marking program available.  " +
+            "It handles all cases including clipped and gapped alignments and locates duplicate molecules using mate cigar information.  " +
+            "All records are then written to the output file with the duplicate records flagged.<br /><br />" +
+            "" +
+            "This tool differs from the MARK_DUPLICATES tool as it may break ties differently.  Furthermore, as it is a one-pass" +
+            " algorithm, it cannot know the program records contained in the file that should be chained in" +
+            " advance.  Therefore it only examines the header to attempt to infer those program group records that have" +
+            " no associated previous program" +
+            " group record.  If a read is encountered without a program record, or not one as previously" +
+            " defined, it will not be updated." +
+            " <p/>" +
+            " This tool will also not work with alignments that have large gaps or deletions, such as those" +
+            " from RNA-seq data.  This is due to the need to buffer small genomic windows to ensure" +
+            " integrity of the duplicate marking, while large skips (ex. skipping introns) in the" +
+            " alignment records would force making that window very large, thus exhausting memory." +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar MarkDuplicatesWithMateCigar \\<br />" +
+            "      I=myBAM.bam \\<br />" +
+            "      O=dups_wmatecig.bam \\<br />" +
+            "      M=dups_wmatecigmetrics.txt" +
+            "</pre>" +
+            "<hr />";
+
     private final Log log = Log.getInstance(MarkDuplicatesWithMateCigar.class);
 
     @Option(doc = "The minimum distance to buffer records to account for clipping on the 5' end of the records." +

@@ -69,20 +69,24 @@ import java.util.Set;
         programGroup = Metrics.class
 )
 public class CollectAlignmentSummaryMetrics extends SinglePassSamProgram {
-    static final String USAGE_SUMMARY = "Produces a file containing summary alignment metrics from a SAM or BAM.";
-    static final String USAGE_DETAILS = "<br />" +
+    static final String USAGE_SUMMARY = "Produces a file containing summary alignment metrics from a SAM or BAM file";
+    static final String USAGE_DETAILS = "Using read outputs from HTS technologies, this tool provides detailed metrics " +
+            "regarding the quality of the " +
+            "reads that passed machine signal-to-noise threshold quality filters (Illumina) as well as values representing the " +
+            "degree of alignment to a reference sequence.  " +
+            "Please see: <br />http://broadinstitute.github.io/picard/picard-metric-definitions.html#AlignmentSummaryMetrics" +
+            "<br />for detailed explanations of each metric.  Additional information can be found by downloading the following documents from the Illumina website: " +
+            "<ul><li>http://support.illumina.com/content/dam/illumina-marketing/documents/products/technotes/hiseq-x-percent-pf-technical-note-770-2014-043.pdf</li> " +
+            "<li>http://support.illumina.com/content/dam/illumina-support/documents/documentation/system_documentation/hiseqx/hiseq-x-system-guide-15050091-d.pdf</li></ul>" +
             "<h4>Usage example:</h4>" +
             "<pre>" +
-            "    java -jar picard.jar CollectAlignmentMetrics \\<br />" +
-            "        R=reference.fasta \\<br />" +
-            "        I=input.bam \\<br />" +
-            "        O=output.txt" +
+            "    java -jar picard.jar CollectAlignmentSummaryMetrics \\<br />" +
+            "          R=reference.fasta \\<br />" +
+            "          I=input.bam \\<br />" +
+            "          O=output.txt" +
             "</pre>" +
             "<hr />";
-    
     private static final Log log = Log.getInstance(CollectAlignmentSummaryMetrics.class);
-
-    // Usage and parameters
 
     @Option(doc="Paired end reads above this insert size will be considered chimeric along with inter-chromosomal pairs.")
     public int MAX_INSERT_SIZE = 100000;

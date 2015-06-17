@@ -21,14 +21,26 @@ import java.util.List;
  * @author jgentry
  */
 @CommandLineProgramProperties(
-        usage = "Adds one or more comments to the header of a specified BAM file. Copies the file with the " +
-                "modified header to a specified output file. Note that a block copying method is used to ensure efficient transfer to the " +
-                "output file. SAM files are not supported",
-        usageShort = "Adds comments to the header of a BAM file",
+        usage =  AddCommentsToBam.USAGE_SUMMARY + AddCommentsToBam.USAGE_DETAILS,
+        usageShort = AddCommentsToBam.USAGE_SUMMARY,
         programGroup = SamOrBam.class
 )
 public class AddCommentsToBam extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Adds comments to the header of a BAM file.  ";
+    static final String USAGE_DETAILS = "Adds one or more comments to the header of a specified BAM file and copies it to the" +
+            " specified output file.  Note that added comments cannot have spaces between words.  However, multiple comments can be added" +
+            " via multiple comment arguments (see below).  A block copying method is used to ensure " +
+            "efficient transfer to the output file. SAM files are not supported.<br />"          +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar AddCommentsToBam \\<br />" +
+            "      I=InputBAM.bam \\<br />" +
+            "      O=ModifiedBam.bam \\<br />" +
+            "      C=\"My_comment\" \\<br />" +
+            "      C=\"My_additional_comment\"" +
+            "</pre>" +
+            "" +
+            "<hr />";
     @Option(shortName = StandardOptionDefinitions.INPUT_SHORT_NAME, doc = "Input BAM file to add a comment to the header")
     public File INPUT;
 

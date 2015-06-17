@@ -62,12 +62,25 @@ import java.util.List;
  * Input files can be in GZip format (end in .gz).
  */
 @CommandLineProgramProperties(
-        usage = "Extracts read sequences and qualities from the input fastq file and writes them into the output file in unaligned BAM format."
-                + " Input files can be in GZip format (end in .gz).\n",
-        usageShort = "Converts a fastq file to an unaligned BAM or SAM file",
+        usage = FastqToSam.USAGE_SUMMARY + FastqToSam.USAGE_DETAILS,
+        usageShort = FastqToSam.USAGE_SUMMARY,
         programGroup = SamOrBam.class
 )
 public class FastqToSam extends CommandLineProgram {
+    static final String USAGE_SUMMARY = "Converts a fastq file to an unaligned BAM or SAM file.  ";
+    static final String USAGE_DETAILS = "Extracts read sequences and qualities from the input fastq file and writes them" +
+            " into the output file in unaligned BAM format.<br /><br />  " +
+            "Three fastq versions are supported: FastqSanger, FastqSolexa and FastqIllumina." +
+            "  Input files can be in GZip format (end in .gz)." +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar FastqToSam \\<br />" +
+            "      F1=example.fastq \\<br />" +
+            "      O=fastq_to_bam.bam \\<br />" +
+            "      SM=for_tool_testing " +
+            "</pre>" +
+            "For details on FastQ specifications, please see: http://maq.sourceforge.net/fastq.shtml" +
+            "<hr />";
     private static final Log LOG = Log.getInstance(FastqToSam.class);
 
     @Option(shortName="F1", doc="Input fastq file (optionally gzipped) for single end data, or first read in paired end data.")

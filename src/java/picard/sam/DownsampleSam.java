@@ -24,15 +24,23 @@ import java.util.Random;
  * of both ends of a pair or neither end of the pair!
  */
 @CommandLineProgramProperties(
-        usage = "Randomly down-sample a SAM or BAM file to retain " +
-                "a random subset of the reads. Mate-pairs are either both kept or both discarded. Reads marked as not primary " +
-                "alignments are all discarded. Each read is given a probability P of being retained - results with the exact " +
-                "same input in the same order and with the same value for RANDOM_SEED will produce the same results.",
-        usageShort = "Down-sample a SAM or BAM file to retain a random subset of the reads",
+        usage = DownsampleSam.USAGE_SUMMARY + DownsampleSam.USAGE_DETAILS,
+        usageShort = DownsampleSam.USAGE_SUMMARY,
         programGroup = SamOrBam.class
 )
 public class DownsampleSam extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Down-sample a SAM or BAM file to retain a random subset of the reads.  ";
+    static final String USAGE_DETAILS = "Randomly down-sample a SAM or BAM file to retain " +
+            "a random subset of the reads. Mate-pairs are either both kept or both discarded. Reads marked as not primary " +
+            "alignments are all discarded. Each read is given a probability P of being retained - results with the exact " +
+            "same input in the same order and with the same value for RANDOM_SEED will produce the same results." +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar DownsampleSam \\<br />" +
+            "      I=mybamfile.bam \\<br />" +
+            "      O=downsampled.bam" +
+            "</pre>" +
+            "<hr />";
     @Option(shortName = StandardOptionDefinitions.INPUT_SHORT_NAME, doc = "The input SAM or BAM file to downsample.")
     public File INPUT;
 

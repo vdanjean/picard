@@ -31,12 +31,50 @@ import java.io.IOException;
  * @author nhomer
  */
 @CommandLineProgramProperties(
-        usage = "Converts a BED file to an Picard Interval List.",
-        usageShort = "Converts a BED file to an Picard Interval List.",
+        usage = BedToIntervalList.USAGE_SUMMARY + BedToIntervalList.USAGE_DETAILS,
+        usageShort = BedToIntervalList.USAGE_SUMMARY,
         programGroup = Intervals.class
 )
 public class BedToIntervalList extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Converts a BED file to an Picard Interval List.  " ;
+    static final String USAGE_DETAILS = "BED files contain sequence data displayed in a flexible format that includes nine optional fields, " +
+            "in addition to three required fields within the annotation tracks.  The required fields of a BED file include:" +
+            "<pre>" +
+            "     chrom - The name of the chromosome (e.g. chr20) or scaffold (e.g. scaffold10671) <br />"   +
+            "     chromStart - The starting position of the feature in the chromosome or scaffold. The first base in a chromosome is numbered \"0\" <br />"   +
+            "     chromEnd - The ending position of the feature in the chromosome or scaffold.  The chromEnd base is not" +
+            " included in the display of the feature. For example, the first 100 bases of a " +
+            "chromosome are defined as chromStart=0, chromEnd=100, and span the bases numbered 0-99" +
+            "</pre>" +
+            "In each annotation track, the number of fields per line must be consistent throughout a data set.<br /> <br /> " +
+            "Interval_list files contain sequence data distributed into intervals.  Interval grouping often reflects specific" +
+            " sequence categories e.g. protein coding regions (exons), but can also be arbitrary.  " +
+            "The required fields for an interval_list file include:" +
+            "<pre> " +
+            "     -Sequence name (SN) - The name of the sequence in the file for identification purposes, can be chromosome number e.g. chr20 <br /> " +
+            "     -Start position - Interval start position (starts at +1) <br /> " +
+            "     -End position - Interval end position (1-based, end inclusive) <br /> " +
+            "     -Strand - Indicates +/- strand for the interval (either + or -) <br /> " +
+            "     -Interval name - (Each interval should have a unique name) " +
+            "</pre>" +
+            "Note that BED files are annotated such that the first base in a chromosome is numbered \"0\", while " +
+            "interval_list files are annotated such that the first position in a chromosome is position \"1\".  <br /><br />" +
+            "" +
+            "Conversion of a BED to an \".interval_list\" file is an essential step for data processing with" +
+            " most of the Picard (and GATK) analysis tools.  The tool requires a \".dict\" file, " +
+            "which can be created using Picard's CreateSequenceDictionary tool."+
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar BedToIntervalList \\<br />" +
+            "      I=BEDfile.bed \\<br />" +
+            "      O=intervalList.interval_list \\<br />" +
+            "      SD=referenceSeq.dict" +
+            "</pre>" +
+            "Output files can be viewed without modification using a text editor. " +
+            "<br /><br />For additional information regarding BED files and the annotation field options, please see:" +
+            " http://genome.ucsc.edu/FAQ/FAQformat.html.<br /> <br /> "+
+            "<hr />"
+            ;
     @Option(shortName = StandardOptionDefinitions.INPUT_SHORT_NAME, doc = "The input BED file")
     public File INPUT;
 

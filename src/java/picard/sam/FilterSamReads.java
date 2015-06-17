@@ -57,13 +57,24 @@ import java.text.DecimalFormat;
  * $Id$
  */
 @CommandLineProgramProperties(
-        usage = "Produces a new SAM or BAM file by including or excluding aligned reads " +
-                "or a list of reads names supplied in the READ_LIST_FILE from the INPUT SAM or BAM file.\n",
-        usageShort = "Creates a new SAM or BAM file by including or excluding aligned reads",
+        usage =  FilterSamReads.USAGE_SUMMARY + FilterSamReads.USAGE_DETAILS,
+        usageShort = FilterSamReads.USAGE_SUMMARY,
         programGroup = SamOrBam.class
 )
 public class FilterSamReads extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Creates a new SAM or BAM file by including or excluding aligned reads";
+    static final String USAGE_DETAILS = "Produces a new SAM or BAM file by including or excluding aligned reads " +
+            "or a list of reads names supplied in the READ_LIST_FILE from the INPUT SAM or BAM file." +
+            "" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar FilterSamReads \\<br /> " +
+            "      I=myBAM.bam \\ <br /> " +
+            "      O=filtered_reads.bam \\<br /> " +
+            "      Filter=includeAligned" +
+            "</pre> " +
+            "For information on the SAM format, please see: http://samtools.sourceforge.net" +
+            "<hr />";
     private static final Log log = Log.getInstance(FilterSamReads.class);
 
     private static enum Filter {

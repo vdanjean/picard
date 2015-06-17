@@ -48,13 +48,47 @@ import java.util.Set;
  * @author Doug Voet (dvoet at broadinstitute dot org)
  */
 @CommandLineProgramProperties(
-        usage = "Reads a SAM or BAM file and writes a file containing metrics about " +
-                "the statistical distribution of insert size (excluding duplicates) " +
-                "and generates a Histogram plot.",
-        usageShort = "Writes insert size distribution metrics for a SAM or BAM file",
+        usage = CollectInsertSizeMetrics.USAGE_SUMMARY + CollectInsertSizeMetrics.USAGE_BRIEF,
+        usageShort = CollectInsertSizeMetrics.USAGE_BRIEF,
         programGroup = Metrics.class
 )
 public class CollectInsertSizeMetrics extends SinglePassSamProgram {
+    static final String USAGE_BRIEF = "Metrics about the insert size distribution of a paired-end library";
+    static final String USAGE_SUMMARY = "This tool provides useful metrics for validating library construction including " +
+            "the insert size distribution and read orientation of paired-end libraries. <br /><br />" +
+            "" +
+            "The expected proportions of these metrics vary depending on the type of library preparation used, resulting from " +
+            "technical differences between pair-end libraries and mate-pair libraries.  For paired-end sequencing, the " +
+            "library preparation yields a set of fragments, and the machine sequences each fragment from both ends " +
+            "[for example if you have a 300bp contiguous fragment, the machine will sequence e.g. bases 1-75 " +
+            "(forward direction) and bases 225-300 (reverse direction) of the " +
+            "fragment].  In mate-pair sequencing, the library preparation yields two fragments that are distal to each other in the genome and in the" +
+            " opposite in orientation to that of a mate-paired fragment.<br /><br />" +
+            "" +
+            "The three read orientation categories are forward reverse (FR), reverse forward (RF), and reverse-reverse/forward-forward (TANDEM)."+
+            "In general, paired-end reads tend to be in a FR orientation, have relatively small inserts (~300 - 500 bp), and are particularly useful for the" +
+            " sequencing of fragments that contain short repeat regions.  Mate-pair fragments are generally" +
+            " in a RF conformation, contain larger inserts (~3 kb), and enable sequence coverage of genomic regions" +
+            " containing large structural rearrangements.  Tandem reads can result from inversions and rearrangements " +
+            "during library preparation.  For detailed explanation of library construction strategies and how read orientations are determined, please see: " +
+            "<li>illumina.com/technology/next-generation-sequencing/paired-end-sequencing_assay.html" +
+            "<li>illumina.com/documents/products/technotes/technote_nextera_matepair_data_processing.pdf"+
+            "<br /><br />The CollectInsertSizeMetrics tool outputs the percentages of read pairs in each of the three orientations (FR, RF, and TANDEM) as a histogram." +
+            "  In addition, the insert size distribution is output as both a histogram \".insert_size_Histogram.pdf\" and as a data table \".insert_size_metrics.txt\"."+
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar CollectInsertSizeMetrics \\<br />" +
+            "      I=input.bam \\<br />" +
+            "      O=insert_size_metrics.txt \\<br />" +
+            "      H=insert_size_histogram.pdf \\<br />" +
+            "      M=0.5" +
+            "</pre>"    +
+            "If processing a small file, set the minimum percentage option (M) to 0.5, otherwise an error" +
+            " can be generated. "+
+            "<br /><br />For additional information, see " +
+            "http://broadinstitute.github.io/picard/picard-metric-definitions.html#InsertSizeMetrics" +
+            "<hr />";
+
     private static final Log log = Log.getInstance(CollectInsertSizeMetrics.class);
     private static final String Histogram_R_SCRIPT = "picard/analysis/insertSizeHistogram.R";
 

@@ -55,12 +55,33 @@ import java.util.*;
  * @author Tim Fennell
  */
 @CommandLineProgramProperties(
-        usage = "Examines aligned records in the supplied SAM or BAM file to locate duplicate molecules. " +
-                "All records are then written to the output file with the duplicate records flagged.",
-        usageShort = "Examines aligned records in the supplied SAM or BAM file to locate duplicate molecules.",
+        usage = MarkDuplicates.USAGE_SUMMARY + MarkDuplicates.USAGE_DETAILS,
+        usageShort = MarkDuplicates.USAGE_SUMMARY,
         programGroup = SamOrBam.class
 )
 public class MarkDuplicates extends AbstractMarkDuplicatesCommandLineProgram {
+    static final String USAGE_SUMMARY = "Examines aligned records in a SAM or BAM file to locate duplicate molecules.  ";
+    static final String USAGE_DETAILS = "This tool enables the user to identify duplicate reads in a \".bam\" or \".sam\" file.  " +
+            "It is complementary to the ESTIMATE_LIBRARY_COMPLEXITY tool which is useful for detecting optical duplicates." +
+            "  The MARK_DUPLICATES tool is effective in identifying the numbers of PCR-associated replicates.  " +
+            "Since both PCR and optical duplicates compromise variant calling, it is highly recommended " +
+            "to use both tools prior to variant calling. "+
+            "" +
+            "<br /><br />This tool takes the reads in a \".bam\" or \".sam\" file and determines the numbers of" +
+            " READ_PAIRS_EXAMINED, UNMAPPED_READS, UNPAIRED_READS, UNPAIRED_READ DUPLICATES, READ_PAIR_DUPLICATES, " +
+            "and READ_PAIR_OPTICAL_DUPLICATES.  The PCR duplicates are identified as having identical start coordinates. " +
+            "Optical duplicates are identified using the READ_NAME_REGEX and the OPTICAL_DUPLICATE_PIXEL_DISTANCE options." +
+            "  Non-duplicates are identified by start coordinates as well as either the SUM_OF_BASE_QUALITIES or TOTAL_MAPPED_REFERENCE_LENGTH. " +
+            "All records are then written to the output file with the duplicate records flagged. <br />" +
+            "" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar MarkDuplicates \\<br />" +
+            "      I=myBAM.bam \\<br />" +
+            "      O=markedduplicates.txt \\<br />" +
+            "      M=markeddupmetrics.bam " +
+            "</pre>" +
+            "<hr />";
     private final Log log = Log.getInstance(MarkDuplicates.class);
 
     /**

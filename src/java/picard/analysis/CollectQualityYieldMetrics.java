@@ -45,14 +45,41 @@ import java.io.File;
  *
  * @author Martha Borkan
  */
+
+
 @CommandLineProgramProperties(
-        usage = "Collects quality yield metrics, a set of metrics that quantify the quality and yield of sequence data from a " +
-                "SAM/BAM input file.",
-        usageShort = "Collects a set of metrics that quantify the quality and yield of sequence data from the provided SAM/BAM",
+        usage = CollectQualityYieldMetrics.USAGE_SUMMARY + CollectQualityYieldMetrics.USAGE_DETAILS,
+        usageShort = CollectQualityYieldMetrics.USAGE_SUMMARY,
         programGroup = Metrics.class
 )
 public class CollectQualityYieldMetrics extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Collects a set of metrics that indicate the quantity of reads that pass quality thresholds and Illumina-specific filters.  ";
+    static final String USAGE_DETAILS = "This tool helps the user determine the overall quality of a set of reads " +
+            "determining how many reads of a run have a minimum base-quality score and pass filters.  Either the original (OQ) or the recalibrated base quality " +
+            "scores can be used.  The recalibrated base quality scores are obtained from the Base Quality Score Recalibration " +
+            "(BQSR) tool of GATK.  For information on the BQSR tool, please see: " +
+            "<br /><br /> http://gatkforums.broadinstitute.org/discussion/44/base-quality-score-recalibration-bqsr<br /><br /> " +
+            "" +
+            "The CollectQualityYieldMetrics tool also determines the number of bases within the reads that pass the Illumina-specific Chastity filters*."+
+            "<h4>Usage Example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar CollectQualityYieldMetrics \\<br /> " +
+            "      I=input.bam \\<br /> "+
+            "      O=quality_yield_metrics.txt \\<br />" +
+            "</pre>" +
+            "For detailed explanations of the output metrics, please see: " +
+            "http://broadinstitute.github.io/picard/picard-metric-definitions.html#CollectQualityYieldMetrics.QualityYieldMetrics/<br /><br />" +
+            "" +
+            "*Chastity is defined as the ratio of the brightest base intensity divided by the sum of the brightest and " +
+            "second brightest base intensities.  Clusters \"pass filter\" (PF) if no more than 1 base call has a chastity" +
+            " value below 0.6 in the first 25 cycles.  This filtration process removes the least reliable clusters " +
+            "from the image analysis results.  For additional information, please see:" +
+            "<li>Illumina, Inc. (2015).  Calculating Percent Passing Filter for Patterned and Non-Patterned Flow Cells: " +
+            "A comparison of methods for calculating percent passing filter on Illumina flow cells.  www.Illumina.com" +
+            "" +
+            "<li>Ilumina (2014) HiSeq X System user guide.  www.Illumina.com " +
+            "" +
+            "<hr />";
     @Option(shortName = StandardOptionDefinitions.INPUT_SHORT_NAME,
             doc = "A SAM or BAM file to process.")
     public File INPUT;

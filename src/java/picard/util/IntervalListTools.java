@@ -32,14 +32,39 @@ import java.util.Set;
  * @author Tim Fennell
  */
 @CommandLineProgramProperties(
-        usage = " General tool for manipulating interval lists, " +
-                "including sorting, merging, padding, uniqueifying, and other set-theoretic operations. Default operation if given one or more inputs is to " +
-                "merge and sort them.  Other options are controlled by arguments.",
-        usageShort = "General tool for manipulating interval lists",
+        usage = IntervalListTools.USAGE_SUMMARY + IntervalListTools.USAGE_DETAILS,
+        usageShort = IntervalListTools.USAGE_SUMMARY,
         programGroup = Intervals.class
 )
 public class IntervalListTools extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "General tool for manipulating interval lists.  ";
+    static final String USAGE_DETAILS = "File manipulation can include sorting, merging, subtracting, padding, customizing, " +
+            "and other set-theoretic operations. If given one or more inputs, the default operation is to merge" +
+            " and sort them.  Other options e.g. interval subtraction are controlled by the arguments.  <br /><br />" +
+            "This tool accepts both interval_list and VCF input files and lists intervals with respect to a " +
+            "reference sequence that can be written to and read from a file.  The file format is relatively simple" +
+            " and reflects the SAM alignment format to a degree.*  A SAM style header must be present in the file that " +
+            "lists the sequence records against which the intervals are described.  After the header, the file then" +
+            " contains records, one per line in text format with the following" +
+            " values tab-separated: " +
+            "<pre>" +
+            "     -Sequence name (SN) <br />" +
+            "     -Start position (1-based)** <br />" +
+            "     -End position (1-based, end inclusive) <br />" +
+            "     -Strand (either + or -) <br />" +
+            "     -Interval name (ideally unique names for intervals)" +
+            "</pre>" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar IntervalListTools \\<br />" +
+            "      I=il1.interval_list \\<br />" +
+            "      SI=il2.interval_list \\<br />" +
+            "      O=newil.interval_list" +
+            "</pre>" +
+            "* For additional information on the Sam header, please download: samtools.github.io/hts-specs/SAMv1.pdf" +
+            "<br /><br />" +
+            "** Interval files are annotated such that the first position in a chromosome is position \"1\" <br /><br />" +
+            "<hr />";
     @Option(shortName = StandardOptionDefinitions.INPUT_SHORT_NAME,
             doc = "One or more interval lists. If multiple interval lists are provided the output is the" +
                     "result of merging the inputs. Supported formats are interval_list and VCF.", minElements = 1)

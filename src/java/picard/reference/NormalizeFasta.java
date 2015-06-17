@@ -22,14 +22,24 @@ import java.io.IOException;
  * same length, and are a reasonable length!
  */
 @CommandLineProgramProperties(
-        usage = "Takes any file that conforms to the fasta format and " +
-                "normalizes it so that all lines of sequence except the last line per named sequence " +
-                "are of the same length.",
-        usageShort = "Normalizes lines of sequence in a fasta file to be of the same length",
+        usage = NormalizeFasta.USAGE_SUMMARY + NormalizeFasta.USAGE_DETAILS,
+        usageShort = NormalizeFasta.USAGE_SUMMARY,
         programGroup = Fasta.class
 )
 public class NormalizeFasta extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Normalizes lines of sequence in a fasta file to be of the same length.  ";
+    static final String USAGE_DETAILS = "Takes any fasta-formated file and " +
+            "reformats the sequence, such that all of the lines are of the same length (with the exception of the last line).  " +
+            "Although the default setting is 100 nucleotides per line, the line_length can be specified by the user. <br />" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar NormalizeFasta \\<br />" +
+            "      I=FASTA.fasta \\<br />" +
+            "      O=Normalized_FASTA.fasta" +
+            "</pre>" +
+            "For additional information on the FASTA format, please see: wikipedia.org/wiki/FASTA_format" +
+            "<hr />"
+            ;
     @Option(shortName= StandardOptionDefinitions.INPUT_SHORT_NAME, doc="The input fasta file to normalize.")
     public File INPUT;
 

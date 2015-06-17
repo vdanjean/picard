@@ -30,14 +30,26 @@ import java.io.File;
  * extension will create gzip-compressed output.
  */
 @CommandLineProgramProperties(
-        usage = "Splits an input VCF or BCF file into two VCF files, one for indel records and one for SNPs. The" +
-                "headers of the two output files will be identical. An index file is created and a" +
-                "sequence dictionary is required by default.",
-        usageShort = "Splits an input VCF or BCF file into two VCF or BCF files",
+        usage = SplitVcfs.USAGE_SUMMARY + SplitVcfs.USAGE_DETAILS,
+        usageShort = SplitVcfs.USAGE_SUMMARY,
         programGroup = VcfOrBcf.class
 )
 public class SplitVcfs extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Splits an input VCF or BCF file into two VCF or BCF files.  ";
+    static final String USAGE_DETAILS = "The two new files will contain SNP and INDEL records respectively.  The " +
+            "headers of the two output files will be identical.<br /><br /> " +
+            "A sequence dictionary is required by default.  An index file will be created.  <br /><br />" +
+            "If events other than SNPs or INDELs are present, set the STRICT option to \"false\" to avoid exceptions." +
+            "<br />" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar SplitVcfs \\<br />" +
+            "      I=SortedVCFs.vcf \\<br />" +
+            "      SNP_OUTPUT=SNPOUT.vcf \\<br />" +
+            "      INDEL_OUTPUT=INDELOUT.vcf \\<br />" +
+            "      STRICT=false" +
+            "</pre>" +
+            "<hr />" ;
     @Option(shortName = StandardOptionDefinitions.INPUT_SHORT_NAME, doc="The VCF or BCF input file")
     public File INPUT;
 

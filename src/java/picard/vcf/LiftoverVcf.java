@@ -42,14 +42,29 @@ import java.util.Map;
  * @author Tim Fennell
  */
 @CommandLineProgramProperties(
-        usage = "Lifts a VCF over from one genome build to another using UCSC liftover. The output file will be sorted " +
-                "and indexed. Records may be rejected because they cannot be lifted over or because post-liftover the " +
-                "reference allele mismatches the target genome build.  Rejected records will be emitted with filters " +
-                "to the REJECT file, on the source genome.",
-        usageShort = "Lifts a VCF between genome builds.",
+        usage = LiftoverVcf.USAGE_SUMMARY + LiftoverVcf.USAGE_DETAILS,
+        usageShort = LiftoverVcf.USAGE_SUMMARY,
         programGroup = VcfOrBcf.class
 )
 public class LiftoverVcf extends CommandLineProgram {
+    static final String USAGE_SUMMARY = "Lifts a VCF file between reference genome builds.  ";
+    static final String USAGE_DETAILS = "Enables the coordinates of variants within a VCF file to be converted from one " +
+            "reference sequence build to another.  The output file will be sorted and indexed using the target genome" +
+            " build.  Reference sequence should be the target genome build.  <br /><br />" +
+            "Records may be rejected because they cannot be lifted over or because of sequence incompatibilities" +
+            " between the source and target reference genomes.  Rejected records will be emitted with filters to the REJECT file," +
+            " using the source genome coordinates.<br />" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar LiftoverVcf \\<br />" +
+            "     I=origin_VCF.vcf \\<br />" +
+            "     O=liftover_VCF.vcf \\<br />" +
+            "     CHAIN=b37tohg19.chain \\<br />" +
+            "     REJECT=rejected_variants.vcf \\<br />" +
+            "     REFERENCE_SEQUENCE=target_reference_seq.fasta" +
+            "</pre>" +
+            "For additional information, please see: http://genome.ucsc.edu/cgi-bin/hgLiftOver" +
+            "<hr />";
     @Option(shortName=StandardOptionDefinitions.INPUT_SHORT_NAME, doc="The input VCF/BCF file to be lifted over.")
     public File INPUT;
 
@@ -65,7 +80,7 @@ public class LiftoverVcf extends CommandLineProgram {
 
     @Option(shortName = StandardOptionDefinitions.REFERENCE_SHORT_NAME, common=false,
             doc = "The reference sequence (fasta) for the TARGET genome build.  The fasta file must have an " +
-                    "accompanying sqeuence dictionary (.dict file).")
+                    "accompanying sequence dictionary (.dict file).")
     public File REFERENCE_SEQUENCE = Defaults.REFERENCE_FASTA;
 
     /** Filter name to use when a target cannot be lifted over. */

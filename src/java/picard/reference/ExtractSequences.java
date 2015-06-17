@@ -50,14 +50,29 @@ import java.io.IOException;
  * @author Tim Fennell
  */
 @CommandLineProgramProperties(
-        usage = "Extracts one or more intervals described in an interval_list file " +
-                "from a given reference sequence and writes them out in FASTA format. Requires a fasta index " +
-                "file to be present.",
-        usageShort = "Extracts intervals from a reference sequence, writing them to a FASTA file",
+        usage = ExtractSequences.USAGE_SUMMARY + ExtractSequences.USAGE_DETAILS,
+        usageShort = ExtractSequences.USAGE_SUMMARY,
         programGroup = Fasta.class
 )
 public class ExtractSequences extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY ="Extracts intervals from a reference sequence, writing them to a FASTA file.  ";
+    static final String USAGE_DETAILS ="Simple command line program that allows sub-sequences represented by an interval" +
+            " list to be extracted from a reference sequence file and writes them in FASTA format.  " +
+            "Requires a FASTA index file to be present.<br /><br />" +
+            "Interval_list files are DNA sequence files in which the sequence is grouped by arbitrary but often functional criteria.  " +
+            "A common use for interval files is to separate protein coding (exons) from non-coding (introns," +
+            " regulatory, etc.) regions.  <br /><br />" +
+            "Subsequent to extraction, FASTA-formated data can be used by a multitude of sequence analysis tools.  For additional information, " +
+            "please see: http://en.wikipedia.org/wiki/FASTA_format/ " +
+            "<br />" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar ExtractSequences \\<br />" +
+            "      INTERVAL_LIST=myIL.interval_list \\<br />" +
+            "      R=human_b37_20.fasta \\<br />" +
+            "      O=extracted_IL_sequences.fasta" +
+            "</pre>" +
+            "<hr />";
     @Option(doc="Interval list describing intervals to be extracted from the reference sequence.")
     public File INTERVAL_LIST;
 

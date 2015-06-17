@@ -43,13 +43,27 @@ import java.util.List;
  * @author alecw@broadinstitute.org
  */
 @CommandLineProgramProperties(
-        usage = "Lifts over an interval list from one reference build to another. Based on UCSC liftOver." +
-                " Uses a UCSC chain file to guide the liftOver.",
-        usageShort = "Lifts over an interval list from one reference build to another",
+        usage = LiftOverIntervalList.USAGE_SUMMARY + LiftOverIntervalList.USAGE_DETAILS,
+        usageShort = LiftOverIntervalList.USAGE_SUMMARY,
         programGroup = Intervals.class
 )
 public class LiftOverIntervalList extends CommandLineProgram {
-
+    static final String USAGE_SUMMARY = "Lifts over an interval list from one reference build to another.  ";
+    static final String USAGE_DETAILS = "This tool takes the aligned reads in an interval list and adjusts the read" +
+            "coordinates based on the new reference sequence provided.  This tool requires a \".chain\" file enabling " +
+            "the conversion to the new coordinates from the original reference sequence.  It is based on UCSC liftOver " +
+            "tool and uses a UCSC chain file to guide the liftOver tool.  It accepts both \".interval_list\" or \".vcf\" interval files." +
+            "<br />" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar LiftOverIntervalList \\<br />" +
+            "      I=intervallist.vcf \\<br />" +
+            "      O=liftedintervallist.txt \\<br />" +
+            "      SD=ucsc.hg19.dict \\<br />" +
+            "      CHAIN=b37tohg19.chain" +
+            "</pre>" +
+            "For additional information, please see: http://genome.ucsc.edu/cgi-bin/hgLiftOver" +
+            "<hr />";
     private static final Log LOG = Log.getInstance(LiftOverIntervalList.class);
 
     @Option(doc = "Interval list to be lifted over.", shortName = StandardOptionDefinitions.INPUT_SHORT_NAME)
