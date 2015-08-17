@@ -149,8 +149,6 @@ public class CollectMultipleMetrics extends CommandLineProgram {
                 program.CHART_OUTPUT = new File(outbase + ".gc_bias.pdf");
 
                 program.INPUT = input;
-                program.METRIC_ACCUMULATION_LEVEL = CollectionUtil.makeSet(MetricAccumulationLevel.ALL_READS,
-                        MetricAccumulationLevel.LIBRARY);
                 program.WINDOW_SIZE = 100;
                 program.MINIMUM_GENOME_FRACTION = 1.0E-5;
                 program.IS_BISULFITE_SEQUENCED = false;
